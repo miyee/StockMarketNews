@@ -1,55 +1,32 @@
-import React from 'react'
-import DailyTrend from './DailyTrend'
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import HourlyTrend from './HourlyTrend';
-// import { type } from 'os';
-// import FormLabel from '@material-ui/core/FormLabel';
+import React, { useState } from 'react'
+import Slider from '@material-ui/core/Slider'
+import IndividualTrend from './IndividualTrend';
 
 const Trends = ({stocks}) => {
 
-    // handle changes to stock interval comparison
-    const [interval, setInterval] = React.useState("daily")
-    function handleChange(event) {
-        setInterval(event.target.value);
+    const [age, setAge] = useState("20")
+    function handleChange(event, value) {
+        setAge(value)
     }
 
     return (
         <div style={{display:"center"}}>
-            <FormControl component="fieldset">
-                <RadioGroup aria-label="position" name="position" value={interval} onChange={handleChange} row>
-                    <FormControlLabel
-                        value="daily"
-                        control={<Radio color="primary" />}
-                        label="Daily"
-                    />
-                    <FormControlLabel
-                        value="hourly"
-                        control={<Radio color="primary" />}
-                        label="Hourly"
-                    />
-                </RadioGroup>
-            </FormControl>
+            <Slider
+                defaultValue={20}
+                aria-labelledby="discrete-slider-small-steps"
+                step={1}
+                marks
+                min={1}
+                max={100}
+                valueLabelDisplay="auto"
+                onChange={handleChange}
+            />
             <ul style={{'listStyleType':'none'}}>
                 {
                     stocks.map( stock => {
-                        if (interval === 'daily') {
-                            return (
-                                <DailyTrend key={stock} stock={stock}/>
-                            );
-                        }
-                        else if (interval === 'hourly') {
-                            return (
-                                <HourlyTrend key={stock} stock={stock}/>
-                            );
-                        }
-                        else {
-                            return (
-                                <p>default</p>
-                            )
-                        }
+                        return (
+                            <IndividualTrend key={stock} stock={stock} age={age}/>
+                        );
                     })
                 }
             </ul>
