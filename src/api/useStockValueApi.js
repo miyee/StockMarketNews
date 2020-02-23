@@ -1,7 +1,6 @@
 // Constants
 const TIME_SERIES_DAILY = "Time Series (Daily)";
 const TIME_SERIES_HOURLY = "Time Series (60min)";
-const OPEN_KEY = "1. open";
 const CLOSE_KEY = "4. close";
 
 const createDailyApiUrl = (stockName, key) => {
@@ -23,16 +22,6 @@ export const getDailyValues = async (stockName) => {
     const dailyValues = json[TIME_SERIES_DAILY];
     const latestDate = Object.keys(dailyValues)[0];
 
-    // We're assuming the api is going to return the latest values first (what we care about)
-    // Otherwise, we can reduce the keyset to find the 'highest' value
-    // const latestDate = Object.keys(dailyValues).reduce(function(a, b){ return a > b ? a : b });
-
-    const opening = dailyValues[latestDate][OPEN_KEY];
-    const closing = dailyValues[latestDate][CLOSE_KEY];
-
-    console.log(stockName + " | OPEN | " + opening)
-    console.log(stockName + " | CLOSE | " + closing)
-
     // Get all the values into priceMap
     var priceMap = {};
     
@@ -40,7 +29,7 @@ export const getDailyValues = async (stockName) => {
         priceMap[i] = parseFloat(dailyValues[i][CLOSE_KEY]);
     }
 
-    return [latestDate, opening, closing, priceMap];
+    return [latestDate, priceMap];
 
 }
 

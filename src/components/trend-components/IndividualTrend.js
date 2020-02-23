@@ -5,11 +5,9 @@ import 'chart.js';
 
 import { getDailyValues } from '../../api/useStockValueApi'
 
-const DailyTrend = ({stock}) => {
+const DailyTrend = ({stock,age}) => {
     
     const [latestDate, setLatestDate] = useState(false);
-    const [opening, setOpening] = useState(false);
-    const [closing, setClosing] = useState(false);
     const [priceMap, setPriceMap] = useState(false);
     
 
@@ -20,28 +18,35 @@ const DailyTrend = ({stock}) => {
     const parseData = () => {
 
         (async () => {
-            const [date, openPrice, closePrice, priceMap] = await getDailyValues(stock)
-            setOpening(openPrice);
-            setClosing(closePrice);
+            const [date, priceMap] = await getDailyValues(stock);
             setLatestDate(date);
             setPriceMap(priceMap);
         })()
     }
 
+    const updatePriceMap = (map, age) => {
+
+        var result = {};
+        // console.log("Full map is " + JSON.stringify(map) + " with length " + Object.keys(map).length)
+
+        for (var index = 0; index < age && index < Object.keys(map).length; index++) {
+            var key = Object.keys(map)[index];
+            result[key] = map[key];
+        }
+        return result;
+    } 
 
     return (
         <li>
             <Card style={{
                 display:"center",
                 backgroundColor:"#ededed",
-                color: parseFloat(opening) < parseFloat(closing) ? "green" : "red"
             }}>
-                <b>{stock} ({latestDate})</b><br/>
-                {opening} (OPEN)<br/>
-                {closing} (CLOSE)
+                <b>{stock}</b><br/>
+                Last Updated: {latestDate}
             </Card>
-            <LineChart data={priceMap} curve={false} prefix="$" messages={{empty: "No data"}} />
-
+            <LineChart data={updatePriceMap(priceMap, age)} curve={false} prefix="$" messages={{empty: "No data"}} />
+            <br/>
         </li>
     )
 }
