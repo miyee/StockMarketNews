@@ -12,13 +12,12 @@ const News = ({stocks}) => {
         }
     }, [stocks]);
 
-
     async function callNewsAPI() {
         var req = new Request(url);
         var result = await fetch(req).then(function(response) {
             return response.json();
         });
-
+        
         setNewsList(result.articles);
     };
 
