@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import IndividualNews from './components/invidualNews';
 
-const url = 'http://newsapi.org/v2/top-headlines?' + 'country=us&' + 'apiKey=a2976be66da94d908ee37e8a22718f4e';
+const URL_HEADER = 'https://newsapi.org/v2';
+const SEARCH_URL = '/everything?q=';
+const NEWS_API_KEY = 'a2976be66da94d908ee37e8a22718f4e';
 
 const News = ({stocks}) => {
     const [newsList, setNewsList] = useState([]);
@@ -13,18 +15,32 @@ const News = ({stocks}) => {
     }, [stocks]);
 
     async function callNewsAPI() {
-        var req = new Request(url);
+        var req = new Request(generateRequestURL());
         var result = await fetch(req).then(function(response) {
             return response.json();
         });
-        
-        setNewsList(result.articles);
+
+        if(result) {
+            setNewsList(result.articles);
+        }
     };
 
-    function getTitle() {
-        if(newsList.length) {
-            return newsList[0].title;
-        }
+    function generateRequestURL() {
+        const requestURL =  URL_HEADER + SEARCH_URL + combineAllSearches() + '&sortBy=popularity' + '&apiKey=' + NEWS_API_KEY;
+        return requestURL;
+    }
+
+    function combineAllSearches() {
+        let totalSearchString = '';
+        stocks.forEach((stockName, index) => {
+            if(index === stocks.length - 1) {
+                totalSearchString += stockName;
+            } else {
+                totalSearchString += stockName + ' OR ';
+            }        
+        });
+
+        return '(' + totalSearchString + ')';
     }
 
     return (
