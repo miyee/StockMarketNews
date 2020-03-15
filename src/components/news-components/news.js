@@ -11,6 +11,8 @@ const News = ({stocks}) => {
     useEffect(() => {
         if(stocks.length) {
             callNewsAPI();
+        } else {
+            setNewsList([]);
         }
     }, [stocks]);
 
