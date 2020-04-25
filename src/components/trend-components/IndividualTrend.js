@@ -1,15 +1,20 @@
 import React, {useState, useEffect} from 'react'
 import Card from '@material-ui/core/Card';
+import Slider from '@material-ui/core/Slider'
 import { LineChart } from 'react-chartkick';
 import 'chart.js';
 
 import { getDailyValues } from '../../api/useStockValueApi'
 
-const DailyTrend = ({stock,age}) => {
+const DailyTrend = ({stock}) => {
     
     const [latestDate, setLatestDate] = useState(false);
     const [priceMap, setPriceMap] = useState(false);
-    
+    const [age, setAge] = useState("20")
+
+    function handleChange(event, value) {
+        setAge(value)
+    }
 
     useEffect(() => {
         parseData()
@@ -38,6 +43,16 @@ const DailyTrend = ({stock,age}) => {
 
     return (
         <li>
+            <Slider
+                defaultValue={20}
+                aria-labelledby="discrete-slider-small-steps"
+                step={1}
+                marks
+                min={1}
+                max={100}
+                valueLabelDisplay="auto"
+                onChange={handleChange}
+            />
             <Card style={{
                 display:"center",
                 backgroundColor:"#ededed",
