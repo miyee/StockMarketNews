@@ -68,14 +68,14 @@ const MainPage = () => {
                         aria-label="news and trends tabs"
                         centered
                     >
-                        <Tab label="News" />
+                        {/* <Tab label="News" /> */}
                         <Tab label="Trends" />
                     </Tabs>
                     
-                    <TabPanel value={currentTab} index={0}>
+                    {/* <TabPanel value={currentTab} index={0}>
                         <News stocks={stocks}/>
-                    </TabPanel>
-                    <TabPanel value={currentTab} index={1}>
+                    </TabPanel> */}
+                    <TabPanel value={currentTab} index={0}>
                         <Trends stocks={stocks} />
                     </TabPanel>
                 </Grid>
